@@ -33,8 +33,6 @@ Consulta consultas[MAX_CONSULTAS];
 int totalPacientes = 0;
 int totalConsultas = 0;
 
-/* ── utilidades ──────────────────────────────────────────────────────────── */
-
 void limparBuffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -110,8 +108,6 @@ void lerHora(char *buf, const char *campo) {
     }
 }
 
-/* ── lógica principal ────────────────────────────────────────────────────── */
-
 int encontrarPaciente(int id) {
     for (int i = 0; i < totalPacientes; i++) {
         if (pacientes[i].id == id) return i;
@@ -126,9 +122,11 @@ void cadastrarPaciente(void) {
     }
     printf("\n--- CADASTRAR PACIENTE ---\n");
     pacientes[totalPacientes].id = totalPacientes + 1;
-    printf("  (max %d caracteres)\n  Nome: ", MAX_NOME - 1);
+
     limparBuffer();
+    printf("  (max %d caracteres)\n  Nome: ", MAX_NOME - 1);
     lerLinha(pacientes[totalPacientes].nome, MAX_NOME, "Nome");
+
     while (1) {
         printf("  Idade: ");
         if (scanf("%d", &pacientes[totalPacientes].idade) == 1
@@ -140,8 +138,10 @@ void cadastrarPaciente(void) {
         printf("  [!] Idade invalida. Insira um numero entre 1 e 150.\n");
         limparBuffer();
     }
+
     printf("  (max %d caracteres)\n  Contacto: ", MAX_CONTACTO - 1);
     lerLinha(pacientes[totalPacientes].contacto, MAX_CONTACTO, "Contacto");
+
     totalPacientes++;
     printf("Paciente cadastrado com sucesso! ID: %d\n", totalPacientes);
 }
@@ -155,7 +155,7 @@ void listarPacientes(void) {
     printf("%-5s %-25s %-8s %-15s\n", "ID", "Nome", "Idade", "Contacto");
     printf("--------------------------------------------------------------\n");
     for (int i = 0; i < totalPacientes; i++) {
-        printf("%-5d %-25d %-8d %-15s\n",
+        printf("%-5d %-25s %-8d %-15s\n",
             pacientes[i].id,
             pacientes[i].nome,
             pacientes[i].idade,
@@ -176,10 +176,12 @@ void marcarConsulta(void) {
     }
     printf("\n--- MARCAR CONSULTA ---\n");
     listarPacientes();
+
     int idPac;
     printf("ID do paciente: ");
     scanf("%d", &idPac);
     limparBuffer();
+
     int idx = encontrarPaciente(idPac);
     if (idx == -1) {
         printf("Paciente nao encontrado.\n");
@@ -187,11 +189,14 @@ void marcarConsulta(void) {
     }
     consultas[totalConsultas].id = totalConsultas + 1;
     consultas[totalConsultas].idPaciente = idPac;
+
     lerData(consultas[totalConsultas].data, "Data");
     lerHora(consultas[totalConsultas].hora, "Hora");
+
     printf("  (max %d caracteres)\n"
            "  Tipo (ex: Geral, Cardiologia...): ", MAX_TIPO - 1);
     lerLinha(consultas[totalConsultas].tipo, MAX_TIPO, "Tipo");
+
     strcpy(consultas[totalConsultas].estado, "Agendada");
     totalConsultas++;
     printf("Consulta marcada com sucesso! ID: %d\n", totalConsultas);
@@ -234,9 +239,12 @@ void verConsultasPaciente(void) {
     }
     printf("\n--- VER CONSULTAS DE UM PACIENTE ---\n");
     listarPacientes();
+
     int idPac;
     printf("ID do paciente: ");
     scanf("%d", &idPac);
+    limparBuffer();
+
     int idx = encontrarPaciente(idPac);
     if (idx == -1) {
         printf("Paciente nao encontrado.\n");
@@ -268,9 +276,12 @@ void verProximaConsulta(void) {
     }
     printf("\n--- PROXIMA CONSULTA DE UM PACIENTE ---\n");
     listarPacientes();
+
     int idPac;
     printf("ID do paciente: ");
     scanf("%d", &idPac);
+    limparBuffer();
+
     int idx = encontrarPaciente(idPac);
     if (idx == -1) {
         printf("Paciente nao encontrado.\n");
@@ -307,9 +318,12 @@ void alterarEstadoConsulta(void) {
     }
     printf("\n--- ALTERAR ESTADO DA CONSULTA ---\n");
     listarConsultas();
+
     int idCon;
     printf("ID da consulta (0 para cancelar): ");
     scanf("%d", &idCon);
+    limparBuffer();
+
     if (idCon == 0) {
         printf("Operacao cancelada.\n");
         return;
@@ -330,6 +344,7 @@ void alterarEstadoConsulta(void) {
     printf("Opcao: ");
     int op;
     scanf("%d", &op);
+    limparBuffer();
     switch (op) {
         case 1: strcpy(consultas[idx].estado, "Agendada");  break;
         case 2: strcpy(consultas[idx].estado, "Realizada"); break;
@@ -346,9 +361,12 @@ void eliminarPaciente(void) {
     }
     printf("\n--- ELIMINAR PACIENTE ---\n");
     listarPacientes();
+
     int idPac;
     printf("ID do paciente (0 para cancelar): ");
     scanf("%d", &idPac);
+    limparBuffer();
+
     if (idPac == 0) {
         printf("Operacao cancelada.\n");
         return;
